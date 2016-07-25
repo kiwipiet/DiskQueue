@@ -1,9 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using DiskQueue.Core;
+using Newtonsoft.Json;
+using Polly;
+using Polly.Retry;
 
-namespace DiskQueue.Shared
+namespace DiskQueue
 {
     public class DiskQueue : IDiskQueue
     {
@@ -12,11 +18,14 @@ namespace DiskQueue.Shared
         private const string OnQueueExtension = ".item";
         private const string WorkingExtension = ".working";
         private const string ErrorExtension = ".error";
-        private Random _random = new Random();
-        private Mutex _mutex;
+        private readonly Mutex _mutex;
+        private readonly RetryPolicy _retryPolicy;
 
         public DiskQueue(string directoryPath)
         {
+            _retryPolicy = Policy
+              .Handle<Exception>()
+              .Retry(3);
             _directoryPath = directoryPath;
             Directory.CreateDirectory(directoryPath);
             _mutex = new Mutex(false, @"Local\" + _directoryPath.Replace(Path.DirectorySeparatorChar, '_'));
@@ -28,12 +37,12 @@ namespace DiskQueue.Shared
             var text = JsonConvert.SerializeObject(item);
             try
             {
-                Try.ThreeTimes(() => File.WriteAllText(path, text, Encoding.UTF8), 100);
-                Try.ThreeTimes(() => File.Move(path, Path.ChangeExtension(path, OnQueueExtension)), 100);
+                _retryPolicy.Execute(() => File.WriteAllText(path, text, Encoding.UTF8));
+                _retryPolicy.Execute(() => File.Move(path, Path.ChangeExtension(path, OnQueueExtension)));
             }
             catch (Exception ex)
             {
-                throw new QueueException($"Could not enqueue item: {item}", ex);
+                throw new DiskQueueException($"Could not enqueue item: {item}", ex);
             }
         }
 
@@ -61,12 +70,12 @@ namespace DiskQueue.Shared
             }
             catch (Exception ex)
             {
-                Try.ThreeTimes(() => File.Move(item, Path.ChangeExtension(item, ErrorExtension)));
-                throw new QueueException($"Could not dequeue item: {item}", ex);
+                _retryPolicy.Execute(() => File.Move(item, Path.ChangeExtension(item, ErrorExtension)));
+                throw new DiskQueueException($"Could not dequeue item: {item}", ex);
             }
             finally
             {
-                Try.ThreeTimes(() => File.Delete(item));
+                _retryPolicy.Execute(() => File.Delete(item));
             }
         }
 
@@ -80,7 +89,7 @@ namespace DiskQueue.Shared
                 }
                 catch (Exception)
                 {
-                    Try.Sleep(100);
+                    Task.Delay(100).Wait();
                 }
             }
         }
@@ -127,7 +136,7 @@ namespace DiskQueue.Shared
                 }
                 catch (Exception)
                 {
-                    Try.Sleep(100);
+                    Task.Delay(100).Wait();
                 }
             }
         }

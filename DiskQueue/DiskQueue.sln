@@ -7,9 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiskQueue.Core", "DiskQueue
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DiskQueue.Shared", "DiskQueue.Shared\DiskQueue.Shared.shproj", "{455741CA-63AC-4558-BFC3-BBFF5D55BC1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiskQueue.Droid", "DiskQueue.Droid\DiskQueue.Droid.csproj", "{D0C7E677-6C84-463E-A17F-722797401898}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiskQueue.iOS", "DiskQueue.iOS\DiskQueue.iOS.csproj", "{2B5CE332-4B3B-4D7A-94C7-05EBC65EEBF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiskQueue.Tests", "DiskQueue.Tests\DiskQueue.Tests.csproj", "{2A4C14BC-45D8-4EBF-B7B9-7E05C578DE82}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		DiskQueue.Shared\DiskQueue.Shared.projitems*{2a4c14bc-45d8-4ebf-b7b9-7e05c578de82}*SharedItemsImports = 4
+		DiskQueue.Shared\DiskQueue.Shared.projitems*{2b5ce332-4b3b-4d7a-94c7-05ebc65eebf8}*SharedItemsImports = 4
 		DiskQueue.Shared\DiskQueue.Shared.projitems*{455741ca-63ac-4558-bfc3-bbff5d55bc1b}*SharedItemsImports = 13
+		DiskQueue.Shared\DiskQueue.Shared.projitems*{d0c7e677-6c84-463e-a17f-722797401898}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +29,18 @@ Global
 		{397A4507-86A7-4559-B617-B40B39583E6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{397A4507-86A7-4559-B617-B40B39583E6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{397A4507-86A7-4559-B617-B40B39583E6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0C7E677-6C84-463E-A17F-722797401898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0C7E677-6C84-463E-A17F-722797401898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0C7E677-6C84-463E-A17F-722797401898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0C7E677-6C84-463E-A17F-722797401898}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B5CE332-4B3B-4D7A-94C7-05EBC65EEBF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5CE332-4B3B-4D7A-94C7-05EBC65EEBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5CE332-4B3B-4D7A-94C7-05EBC65EEBF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5CE332-4B3B-4D7A-94C7-05EBC65EEBF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A4C14BC-45D8-4EBF-B7B9-7E05C578DE82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A4C14BC-45D8-4EBF-B7B9-7E05C578DE82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A4C14BC-45D8-4EBF-B7B9-7E05C578DE82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A4C14BC-45D8-4EBF-B7B9-7E05C578DE82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
