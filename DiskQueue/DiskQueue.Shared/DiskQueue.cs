@@ -8,10 +8,11 @@ using DiskQueue.Core;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
+using Splat;
 
 namespace DiskQueue
 {
-    public class DiskQueue : IDiskQueue
+    public class DiskQueue : IDiskQueue, IEnableLogger
     {
         private readonly string _directoryPath;
         private const string CreatingExtension = ".init";
@@ -25,7 +26,12 @@ namespace DiskQueue
         {
             _retryPolicy = Policy
               .Handle<Exception>()
-              .Retry(3);
+              .Retry(3, (exception, retryCount, context) =>
+              {
+                  var methodThatRaisedException = context["methodName"];
+                  this.Log().DebugException(methodThatRaisedException?.ToString(), exception);
+              });
+
             _directoryPath = directoryPath;
             Directory.CreateDirectory(directoryPath);
             _mutex = new Mutex(false, @"Local\" + _directoryPath.Replace(Path.DirectorySeparatorChar, '_'));
@@ -79,7 +85,7 @@ namespace DiskQueue
             }
         }
 
-        private string ReadTheFile(string fullpath)
+        private static string ReadTheFile(string fullpath)
         {
             while (true)
             {
