@@ -53,7 +53,7 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     XUnit2("./DiskQueue/**/bin/" + configuration + "/*.Tests.dll", new XUnit2Settings {
-        Parallelism = ParallelismOption.All,
+        Parallelism = ParallelismOption.None,
         HtmlReport = false,
         NoAppDomain = true,
         OutputDirectory = "./build"
