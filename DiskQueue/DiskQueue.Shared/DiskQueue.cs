@@ -39,7 +39,8 @@ namespace DiskQueue
 
         public void Enqueue<T>(T item) where T : class
         {
-            var path = Path.Combine(_directoryPath, Guid.NewGuid().ToString()) + CreatingExtension;
+            var path = Path.Combine(_directoryPath,
+                $"{DateTime.Now:yyyyMMddHHmmssfff}-{Guid.NewGuid()}") + CreatingExtension;
             var text = JsonConvert.SerializeObject(item);
             try
             {
@@ -169,17 +170,13 @@ namespace DiskQueue
         private string GetNextInQueue()
         {
             var info = new DirectoryInfo(_directoryPath);
-            var fileInfo = info.GetFiles("*" + OnQueueExtension).OrderBy(p => p.CreationTime).FirstOrDefault();
-            if (fileInfo == null)
-            {
-                return null;
-            }
-            return fileInfo.FullName;
+            var fileInfo = info.GetFiles("*" + OnQueueExtension).OrderBy(p => p.CreationTime).ThenBy(p => p.Name).FirstOrDefault();
+            return fileInfo?.FullName;
         }
         private string TryRenameNextOnQueue()
         {
             var info = new DirectoryInfo(_directoryPath);
-            var fileInfo = info.GetFiles("*" + OnQueueExtension).OrderBy(p => p.CreationTime).FirstOrDefault();
+            var fileInfo = info.GetFiles("*" + OnQueueExtension).OrderBy(p => p.CreationTime).ThenBy(p => p.Name).FirstOrDefault();
             if (fileInfo == null)
             {
                 return null;
