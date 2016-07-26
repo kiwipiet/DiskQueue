@@ -84,6 +84,25 @@ namespace DiskQueue
                 _retryPolicy.Execute(() => File.Delete(item));
             }
         }
+        public T Peek<T>() where T : class
+        {
+            string item = GetNextInQueue();
+            item = item ?? "";
+            if (!File.Exists(item))
+            {
+                return null;
+            }
+            try
+            {
+                var text = ReadTheFile(item);
+                return JsonConvert.DeserializeObject<T>(text);
+            }
+            catch (Exception ex)
+            {
+                _retryPolicy.Execute(() => File.Move(item, Path.ChangeExtension(item, ErrorExtension)));
+                throw new DiskQueueException($"Could not dequeue item: {item}", ex);
+            }
+        }
 
         private static string ReadTheFile(string fullpath)
         {
@@ -147,6 +166,16 @@ namespace DiskQueue
             }
         }
 
+        private string GetNextInQueue()
+        {
+            var info = new DirectoryInfo(_directoryPath);
+            var fileInfo = info.GetFiles("*" + OnQueueExtension).OrderBy(p => p.CreationTime).FirstOrDefault();
+            if (fileInfo == null)
+            {
+                return null;
+            }
+            return fileInfo.FullName;
+        }
         private string TryRenameNextOnQueue()
         {
             var info = new DirectoryInfo(_directoryPath);

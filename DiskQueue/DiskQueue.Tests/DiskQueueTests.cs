@@ -43,11 +43,12 @@ namespace DiskQueue.Tests
         }
 
         [Fact]
-        public void Should_dequeue()
+        public void Should_dequeue_first()
         {
-            _queue.Enqueue("test");
+            _queue.Enqueue("test1");
+            _queue.Enqueue("test2");
             var item = _queue.Dequeue<string>();
-            Assert.Equal("test", item);
+            Assert.Equal("test1", item);
         }
 
         [Fact]
@@ -57,6 +58,26 @@ namespace DiskQueue.Tests
             _queue.Enqueue("teste");
             _queue.Enqueue("teste");
             Assert.Equal(3, _queue.GetQueueInfo().Enqueued);
+        }
+
+        [Fact]
+        public void Peek_first_item()
+        {
+            _queue.Enqueue("test1");
+            _queue.Enqueue("test2");
+            _queue.Enqueue("test3");
+            Assert.Equal("test1", _queue.Peek<string>());
+            Assert.Equal(3, _queue.GetQueueInfo().Enqueued);
+        }
+
+        [Fact]
+        public void Peek_leave_item()
+        {
+            _queue.Enqueue("test1");
+            _queue.Enqueue("test2");
+            Assert.Equal(2, _queue.GetQueueInfo().Enqueued);
+            _queue.Peek<string>();
+            Assert.Equal(2, _queue.GetQueueInfo().Enqueued);
         }
 
         [Fact]

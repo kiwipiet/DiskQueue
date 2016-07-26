@@ -13,6 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiskQueue.iOS", "DiskQueue.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiskQueue.Tests", "DiskQueue.Tests\DiskQueue.Tests.csproj", "{2A4C14BC-45D8-4EBF-B7B9-7E05C578DE82}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2B867AEE-E413-4975-948A-494BB8D399AA}"
+	ProjectSection(SolutionItems) = preProject
+		..\appveyor.yml = ..\appveyor.yml
+		..\build.cake = ..\build.cake
+		..\build.ps1 = ..\build.ps1
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		DiskQueue.Shared\DiskQueue.Shared.projitems*{2a4c14bc-45d8-4ebf-b7b9-7e05c578de82}*SharedItemsImports = 4
