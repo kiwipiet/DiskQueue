@@ -3,6 +3,3 @@ os: Visual Studio 2015
 
 build_script:
 - ps: .\build.ps1
-
-before_build:
-  - nuget restore
